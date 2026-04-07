@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VFIT GYM — Contact</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#FF4D00;--orange-dim:rgba(255,77,0,0.15);--orange-glow:rgba(255,77,0,0.4);--black:#0a0a0a;--charcoal:#111111;--dark:#161616;--muted:#2a2a2a;--border:#222222;--white:#f0ede8;--grey:#888888;--grey-dim:#555555;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:var(--white);font-family:'Barlow',sans-serif;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:var(--orange);z-index:10000;box-shadow:0 0 12px var(--orange-glow);}
+nav{position:fixed;top:3px;left:0;right:0;z-index:1000;padding:20px 60px;display:flex;align-items:center;justify-content:space-between;transition:background 0.4s,padding 0.4s;}
+nav.scrolled{background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);padding:14px 60px;border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:4px;color:var(--white);text-decoration:none;}
+.nav-logo span{color:var(--orange);}
+.nav-links{display:flex;gap:40px;list-style:none;}
+.nav-links a{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--grey);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--white);}
+.nav-cta{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);background:var(--orange);padding:10px 24px;text-decoration:none;transition:box-shadow 0.3s,transform 0.2s;}
+.nav-cta:hover{box-shadow:0 0 24px var(--orange-glow);transform:scale(1.03);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;}
+.hamburger span{display:block;width:24px;height:1.5px;background:var(--white);}
+@media(max-width:900px){nav{padding:16px 24px;}.nav-links{display:none;}.hamburger{display:flex;}}
+
+.page-hero{padding:180px 60px 100px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+.hero-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--orange);margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.hero-eyebrow::before{content:'';display:block;width:40px;height:1px;background:var(--orange);}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,12vw,160px);line-height:0.9;letter-spacing:2px;color:var(--white);}
+.page-title em{color:var(--orange);font-style:normal;}
+.page-subtitle{max-width:520px;font-size:18px;font-weight:300;line-height:1.8;color:rgba(240,237,232,0.55);margin-top:32px;}
+.bg-word{position:absolute;right:-20px;bottom:-40px;font-family:'Bebas Neue',sans-serif;font-size:clamp(120px,20vw,280px);color:rgba(255,77,0,0.03);letter-spacing:4px;pointer-events:none;line-height:1;}
+.section-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--orange);margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+.section-label::before{content:'';display:block;width:24px;height:1px;background:var(--orange);}
+
+/* MAIN CONTACT SECTION */
+.contact-section{padding:120px 60px;background:var(--charcoal);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;max-width:1200px;margin:0 auto;align-items:start;}
+
+/* INFO SIDE */
+.contact-info{}
+.contact-big{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,5vw,72px);color:var(--white);line-height:0.95;margin-bottom:48px;}
+.contact-big em{color:var(--orange);font-style:normal;}
+.info-blocks{display:flex;flex-direction:column;gap:0;}
+.info-block{padding:32px 0;border-bottom:1px solid var(--border);}
+.info-block:first-child{border-top:1px solid var(--border);}
+.info-icon{font-size:20px;color:var(--orange);margin-bottom:12px;}
+.info-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--grey-dim);margin-bottom:8px;}
+.info-value{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:600;letter-spacing:1px;color:var(--white);}
+.info-sub{font-size:13px;font-weight:300;color:var(--grey);margin-top:4px;line-height:1.7;}
+.hours-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.hours-row{font-size:13px;font-weight:300;color:var(--grey);}
+.hours-row span{color:var(--white);font-weight:400;}
+.social-links{display:flex;gap:16px;margin-top:32px;}
+.social-link{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--grey-dim);border:1px solid var(--border);padding:10px 20px;text-decoration:none;transition:all 0.3s;}
+.social-link:hover{color:var(--orange);border-color:var(--orange);}
+
+/* FORM SIDE */
+.contact-form-wrap{}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--white);margin-bottom:8px;line-height:1;}
+.form-sub{font-size:14px;font-weight:300;color:var(--grey);margin-bottom:40px;line-height:1.7;}
+.form-group{margin-bottom:24px;}
+.form-group label{display:block;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--grey-dim);margin-bottom:10px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--dark);border:1px solid var(--border);color:var(--white);font-family:'Barlow',sans-serif;font-size:15px;font-weight:300;padding:16px 20px;outline:none;transition:border-color 0.2s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--orange);}
+.form-group select{appearance:none;cursor:pointer;}
+.form-group textarea{resize:vertical;min-height:120px;}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--grey-dim);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.submit-btn{width:100%;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--black);background:var(--orange);border:none;padding:20px;cursor:pointer;transition:box-shadow 0.3s,transform 0.2s;margin-top:8px;}
+.submit-btn:hover{box-shadow:0 0 40px var(--orange-glow);transform:scale(1.02);}
+.form-success{display:none;background:var(--dark);border:1px solid var(--orange);padding:32px;text-align:center;margin-top:24px;}
+.form-success h3{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--orange);margin-bottom:8px;}
+.form-success p{font-size:14px;font-weight:300;color:var(--grey);}
+
+/* MAP */
+.map-section{background:var(--black);border-top:1px solid var(--border);}
+.map-wrap{position:relative;}
+.map-frame{width:100%;height:480px;border:none;filter:grayscale(80%) contrast(0.8) invert(0.9);opacity:0.7;}
+.map-overlay-card{position:absolute;top:48px;left:60px;background:var(--charcoal);border:1px solid var(--border);padding:32px 36px;max-width:340px;}
+.map-gym-name{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--white);letter-spacing:2px;margin-bottom:4px;}
+.map-gym-name span{color:var(--orange);}
+.map-address{font-size:14px;font-weight:300;color:var(--grey);line-height:1.8;margin-bottom:20px;}
+.map-dir-btn{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--black);background:var(--orange);padding:12px 28px;text-decoration:none;transition:box-shadow 0.3s;}
+.map-dir-btn:hover{box-shadow:0 0 24px var(--orange-glow);}
+
+/* FREE TRIAL CTA */
+.trial-section{padding:100px 60px;background:var(--charcoal);text-align:center;border-top:1px solid var(--border);}
+.trial-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,7vw,96px);color:var(--white);line-height:1;margin-bottom:16px;}
+.trial-title em{color:var(--orange);font-style:normal;}
+.trial-badges{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;}
+.trial-badge{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--orange);border:1px solid var(--orange);padding:8px 20px;}
+
+footer{background:var(--black);padding:60px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:4px;color:var(--grey-dim);text-decoration:none;}
+.footer-logo span{color:var(--orange);opacity:0.6;}
+.footer-copy{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--border);}
+.footer-links{display:flex;gap:28px;list-style:none;}
+.footer-links a{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey-dim);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--orange);}
+
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal-left.visible{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal-right.visible{opacity:1;transform:translateX(0);}
+
+@media(max-width:900px){
+  .page-hero,.contact-section,.trial-section{padding:80px 24px;}
+  .contact-grid{grid-template-columns:1fr;gap:60px;}
+  .form-row{grid-template-columns:1fr;}
+  .map-overlay-card{position:relative;left:0;top:0;max-width:100%;margin:0;}
+  footer{padding:40px 24px;flex-direction:column;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">V<span>FIT</span></a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="coaches.html">Coaches</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Join Now</a>
+  <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="page-hero">
+  <div class="hero-eyebrow">Get In Touch</div>
+  <h1 class="page-title">SHOW<br>UP.<br><em>NOW.</em></h1>
+  <p class="page-subtitle">Your first session is free. No commitment, no pressure — just come and train with us. See what real coaching feels like.</p>
+  <div class="bg-word">COME</div>
+</section>
+
+<section class="contact-section">
+  <div class="contact-grid">
+    <!-- INFO -->
+    <div class="contact-info reveal-left">
+      <div class="section-label">Find Us</div>
+      <h2 class="contact-big">REAL GYM.<br><em>REAL PEOPLE.</em><br>REAL RESULTS.</h2>
+      <div class="info-blocks">
+        <div class="info-block">
+          <div class="info-icon">◉</div>
+          <div class="info-label">Location</div>
+          <div class="info-value">Cuddalore, Tamil Nadu</div>
+          <div class="info-sub">12/4 Gandhi Nagar, Near Bus Stand<br>Cuddalore — 607 001, Tamil Nadu</div>
+        </div>
+        <div class="info-block">
+          <div class="info-icon">◉</div>
+          <div class="info-label">Phone / WhatsApp</div>
+          <div class="info-value">+91 98765 43210</div>
+          <div class="info-sub">WhatsApp us for quick responses. We reply within the hour.</div>
+        </div>
+        <div class="info-block">
+          <div class="info-icon">◉</div>
+          <div class="info-label">Email</div>
+          <div class="info-value">train@vfitgym.in</div>
+          <div class="info-sub">For program enquiries, corporate memberships, and media.</div>
+        </div>
+        <div class="info-block">
+          <div class="info-icon">◉</div>
+          <div class="info-label">Operating Hours</div>
+          <div class="info-value">6 AM – 10 PM Daily</div>
+          <div class="hours-grid">
+            <div class="hours-row">Mon – Fri <span>6:00 AM – 10:00 PM</span></div>
+            <div class="hours-row">Saturday <span>6:00 AM – 9:00 PM</span></div>
+            <div class="hours-row">Sunday <span>7:00 AM – 1:00 PM</span></div>
+            <div class="hours-row">Holidays <span>8:00 AM – 12:00 PM</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="social-links">
+        <a href="#" class="social-link">Instagram</a>
+        <a href="#" class="social-link">WhatsApp</a>
+        <a href="#" class="social-link">Facebook</a>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="contact-form-wrap reveal-right">
+      <div class="form-title">BOOK YOUR<br>FREE TRIAL</div>
+      <div class="form-sub">Fill this in — we'll call you within 24 hours to confirm your session and match you with the right coach.</div>
+      <form id="contact-form" onsubmit="submitForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="Arjun" required>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="Kumar" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+91 98765 43210" required>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="arjun@email.com">
+        </div>
+        <div class="form-group">
+          <label>I'm Interested In</label>
+          <select required>
+            <option value="" disabled selected>Choose a program</option>
+            <option>Weight Loss Program</option>
+            <option>Strength Training</option>
+            <option>General Fitness</option>
+            <option>Athletic Performance</option>
+            <option>Just the free trial first</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Current Fitness Level</label>
+          <select>
+            <option value="" disabled selected>Select your level</option>
+            <option>Complete Beginner</option>
+            <option>Some Experience</option>
+            <option>Regular Gym-Goer</option>
+            <option>Advanced / Athlete</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Anything You Want Us to Know</label>
+          <textarea placeholder="Injuries, goals, preferred timings — anything helps..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Book Free Trial — No Cost, No Commitment</button>
+      </form>
+      <div class="form-success" id="form-success">
+        <h3>YOU'RE IN.</h3>
+        <p>We'll call you within 24 hours to confirm your free trial session and match you with the right coach. See you on the floor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section">
+  <div class="map-wrap">
+    <iframe class="map-frame"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62656.3!2d79.7!3d11.75!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5495d8e0d0b1d9%3A0x1a2b3c4d5e6f7a8b!2sCuddalore%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1234567890"
+      allowfullscreen="" loading="lazy">
+    </iframe>
+    <div class="map-overlay-card">
+      <div class="map-gym-name">V<span>FIT</span> GYM</div>
+      <div class="map-address">12/4 Gandhi Nagar, Near Bus Stand<br>Cuddalore — 607 001<br>Tamil Nadu, India</div>
+      <a href="https://maps.google.com/?q=Cuddalore,Tamil+Nadu" target="_blank" class="map-dir-btn">Get Directions →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRIAL CTA -->
+<section class="trial-section">
+  <div class="section-label" style="justify-content:center;margin-bottom:16px">Free Trial</div>
+  <h2 class="trial-title reveal">7 DAYS.<br><em>FREE.</em> NO STRINGS.</h2>
+  <div class="trial-badges reveal">
+    <span class="trial-badge">No Credit Card</span>
+    <span class="trial-badge">No Lock-In</span>
+    <span class="trial-badge">Coach Included</span>
+    <span class="trial-badge">All Equipment</span>
+  </div>
+  <a href="#contact-form" class="reveal" style="display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--black);background:var(--orange);padding:18px 52px;text-decoration:none;transition:box-shadow 0.3s,transform 0.2s;" onmouseover="this.style.boxShadow='0 0 48px rgba(255,77,0,0.4)'" onmouseout="this.style.boxShadow=''">Start Your Free Trial</a>
+</section>
+
+<footer>
+  <a href="index.html" class="footer-logo">V<span>FIT</span> GYM</a>
+  <ul class="footer-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="coaches.html">Coaches</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+  </ul>
+  <div class="footer-copy">© 2024 VFIT Gym · Cuddalore, Tamil Nadu</div>
+</footer>
+
+<script>
+const bar=document.getElementById('progress-bar');
+window.addEventListener('scroll',()=>{bar.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);});
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}}),{threshold:0.1});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>obs.observe(el));
+function toggleMenu(){document.querySelector('.nav-links').style.display=document.querySelector('.nav-links').style.display==='flex'?'none':'flex';}
+function submitForm(e){
+  e.preventDefault();
+  document.getElementById('contact-form').style.display='none';
+  document.getElementById('form-success').style.display='block';
+  window.scrollTo({top:document.getElementById('form-success').offsetTop-100,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
