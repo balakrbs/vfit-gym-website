@@ -23,9 +23,7 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   html { scroll-behavior: smooth; }
-
   body {
     background: var(--black);
     color: var(--white);
@@ -35,7 +33,7 @@
     cursor: default;
   }
 
-  /* ─── GRAIN OVERLAY ─── */
+  /* GRAIN */
   body::before {
     content: '';
     position: fixed;
@@ -47,12 +45,11 @@
     background-size: 200px 200px;
   }
 
-  /* ─── SCROLL PROGRESS ─── */
+  /* SCROLL PROGRESS */
   #progress-bar {
     position: fixed;
     top: 0; left: 0;
-    height: 3px;
-    width: 0%;
+    height: 3px; width: 0%;
     background: var(--orange);
     z-index: 10000;
     transition: width 0.1s linear;
@@ -82,6 +79,8 @@
     letter-spacing: 4px;
     color: var(--white);
     text-decoration: none;
+    position: relative;
+    z-index: 1100;
   }
   .nav-logo span { color: var(--orange); }
   .nav-links {
@@ -112,10 +111,179 @@
     text-decoration: none;
     transition: box-shadow 0.3s, transform 0.2s;
   }
-  .nav-cta:hover {
-    box-shadow: 0 0 24px var(--orange-glow);
-    transform: scale(1.03);
+  .nav-cta:hover { box-shadow: 0 0 24px var(--orange-glow); transform: scale(1.03); }
+
+  /* ─── HAMBURGER BUTTON ─── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    background: none;
+    border: 1px solid var(--border);
+    padding: 0;
+    position: relative;
+    z-index: 1100;
+    flex-shrink: 0;
+    transition: border-color 0.3s;
   }
+  .hamburger:hover { border-color: var(--orange); }
+  .hamburger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--white);
+    border-radius: 1px;
+    transition: transform 0.35s ease, opacity 0.25s ease, width 0.3s ease;
+    transform-origin: center;
+  }
+  /* X state when open */
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ─── DARK OVERLAY ─── */
+  .side-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 1050;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    backdrop-filter: blur(3px);
+  }
+  .side-overlay.active { opacity: 1; pointer-events: all; }
+
+  /* ─── SIDE PANEL ─── */
+  .side-panel {
+    position: fixed;
+    top: 0; right: -100%;
+    width: min(300px, 82vw);
+    height: 100%;
+    height: 100dvh;
+    background: var(--charcoal);
+    z-index: 1060;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--border);
+    transition: right 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+  }
+  .side-panel.open { right: 0; }
+
+  .side-panel-header {
+    padding: 26px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .side-panel-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 34px;
+    letter-spacing: 4px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .side-panel-logo span { color: var(--orange); }
+
+  .side-nav {
+    list-style: none;
+    flex: 1;
+    padding: 8px 0;
+  }
+  .side-nav li {
+    border-bottom: 1px solid var(--border);
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  /* Staggered entry animation when panel opens */
+  .side-panel.open .side-nav li:nth-child(1) { opacity:1; transform:translateX(0); transition-delay:0.07s; }
+  .side-panel.open .side-nav li:nth-child(2) { opacity:1; transform:translateX(0); transition-delay:0.12s; }
+  .side-panel.open .side-nav li:nth-child(3) { opacity:1; transform:translateX(0); transition-delay:0.17s; }
+  .side-panel.open .side-nav li:nth-child(4) { opacity:1; transform:translateX(0); transition-delay:0.22s; }
+  .side-panel.open .side-nav li:nth-child(5) { opacity:1; transform:translateX(0); transition-delay:0.27s; }
+  .side-panel.open .side-nav li:nth-child(6) { opacity:1; transform:translateX(0); transition-delay:0.32s; }
+
+  .side-nav a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 3px;
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.2s, padding-left 0.25s, background 0.2s;
+  }
+  .side-nav a .arrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    color: var(--grey-dim);
+    transition: color 0.2s, transform 0.25s;
+  }
+  .side-nav a:hover {
+    color: var(--orange);
+    padding-left: 36px;
+    background: rgba(255,77,0,0.04);
+  }
+  .side-nav a:hover .arrow { color: var(--orange); transform: translateX(4px); }
+
+  .side-panel-footer {
+    padding: 24px 28px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease 0.38s, transform 0.3s ease 0.38s;
+  }
+  .side-panel.open .side-panel-footer { opacity:1; transform:translateY(0); }
+
+  .side-cta {
+    display: block;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--orange);
+    padding: 12px;
+    text-decoration: none;
+    margin-bottom: 18px;
+    transition: box-shadow 0.3s;
+  }
+  .side-cta:hover { box-shadow: 0 0 24px var(--orange-glow); }
+
+  .side-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .side-info a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--grey-dim);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+  .side-info a:hover { color: var(--orange); }
+  .side-info a b { color: var(--orange); font-size: 13px; font-style: normal; }
 
   /* ─── HERO ─── */
   #hero {
@@ -129,984 +297,170 @@
     padding-top: 45%;
   }
   .hero-bg {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     background:
       linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.4) 50%, rgba(10,10,10,0.2) 100%),
       linear-gradient(105deg, rgba(255,77,0,0.08) 0%, transparent 50%);
     background-color: #1a1a1a;
   }
   .hero-img {
-    position: absolute;
-    inset: 0;
+    position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
     opacity: 0.45;
-    transform-origin: center center;
+    transform-origin: center;
     animation: heroZoom 20s ease-in-out infinite alternate;
     filter: contrast(1.1) saturate(0.7);
   }
-  @keyframes heroZoom {
-    from { transform: scale(1); }
-    to { transform: scale(1.08); }
-  }
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 0 60px;
-    max-width: 900px;
-  }
-  .hero-tag {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--orange);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .hero-tag::before {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 1px;
-    background: var(--orange);
-  }
-  .hero-h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(72px, 12vw, 160px);
-    line-height: 0.92;
-    letter-spacing: 2px;
-    color: var(--white);
-    margin-bottom: 32px;
-  }
+  @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.08); } }
+  .hero-content { position: relative; z-index: 2; padding: 0 60px; max-width: 900px; }
+  .hero-tag { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--orange); margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+  .hero-tag::before { content: ''; display: block; width: 40px; height: 1px; background: var(--orange); }
+  .hero-h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(72px, 12vw, 160px); line-height: 0.92; letter-spacing: 2px; color: var(--white); margin-bottom: 32px; }
   .hero-h1 .line-orange { color: var(--orange); }
-  .hero-sub {
-    font-family: 'Barlow', sans-serif;
-    font-size: 18px;
-    font-weight: 300;
-    letter-spacing: 1px;
-    color: rgba(240,237,232,0.65);
-    margin-bottom: 48px;
-    max-width: 420px;
-    line-height: 1.7;
-  }
-  .hero-cta {
-    display: inline-block;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--black);
-    background: var(--orange);
-    padding: 18px 48px;
-    text-decoration: none;
-    transition: box-shadow 0.3s, transform 0.2s;
-  }
-  .hero-cta:hover {
-    box-shadow: 0 0 40px var(--orange-glow), 0 0 80px rgba(255,77,0,0.15);
-    transform: scale(1.03);
-  }
-  .hero-stats {
-    position: absolute;
-    right: 60px;
-    bottom: 100px;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    z-index: 2;
-    text-align: right;
-    background: #00000080;
-    padding: 32px;
-  }
-  .hero-stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 48px;
-    color: var(--orange);
-    line-height: 1;
-  }
-  .hero-stat-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--grey);
-  }
-  .scroll-indicator {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    z-index: 2;
-    animation: bounce 2.5s ease-in-out infinite;
-  }
-  .scroll-indicator span {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--grey-dim);
-  }
-  .scroll-line {
-    width: 1px;
-    height: 60px;
-    background: linear-gradient(to bottom, var(--orange), transparent);
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(8px); }
-  }
+  .hero-sub { font-family: 'Barlow', sans-serif; font-size: 18px; font-weight: 300; letter-spacing: 1px; color: rgba(240,237,232,0.65); margin-bottom: 48px; max-width: 420px; line-height: 1.7; }
+  .hero-cta { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--black); background: var(--orange); padding: 18px 48px; text-decoration: none; transition: box-shadow 0.3s, transform 0.2s; }
+  .hero-cta:hover { box-shadow: 0 0 40px var(--orange-glow), 0 0 80px rgba(255,77,0,0.15); transform: scale(1.03); }
+  .hero-stats { position: absolute; right: 60px; bottom: 100px; display: flex; flex-direction: column; gap: 32px; z-index: 2; text-align: right; background: rgba(0,0,0,0.5); padding: 32px; }
+  .hero-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--orange); line-height: 1; }
+  .hero-stat-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); }
+  .scroll-indicator { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 2; animation: bounce 2.5s ease-in-out infinite; }
+  .scroll-indicator span { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--grey-dim); }
+  .scroll-line { width: 1px; height: 60px; background: linear-gradient(to bottom, var(--orange), transparent); }
+  @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
 
-  /* ─── SECTION BASE ─── */
   section { position: relative; }
-  .section-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--orange);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .section-label::before {
-    content: '';
-    display: block;
-    width: 24px;
-    height: 1px;
-    background: var(--orange);
-  }
+  .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--orange); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--orange); }
 
-  /* ─── PHILOSOPHY ─── */
-  #philosophy {
-    background: var(--charcoal);
-    padding: 120px 60px;
-    overflow: hidden;
-  }
-  .philosophy-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .philosophy-big-text {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(56px, 7vw, 96px);
-    line-height: 0.95;
-    color: var(--white);
-    margin-bottom: 40px;
-  }
-  .philosophy-big-text em {
-    color: var(--orange);
-    font-style: normal;
-  }
-  .philosophy-body {
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 1.9;
-    color: rgba(240,237,232,0.6);
-    margin-bottom: 32px;
-    max-width: 380px;
-    border-left: 2px solid var(--orange);
-    padding-left: 24px;
-  }
-  .philosophy-pillars {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  .pillar {
-    padding: 28px 0;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    gap: 24px;
-    align-items: flex-start;
-  }
+  /* PHILOSOPHY */
+  #philosophy { background: var(--charcoal); padding: 120px 60px; overflow: hidden; }
+  .philosophy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1200px; margin: 0 auto; }
+  .philosophy-big-text { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 7vw, 96px); line-height: 0.95; color: var(--white); margin-bottom: 40px; }
+  .philosophy-big-text em { color: var(--orange); font-style: normal; }
+  .philosophy-body { font-size: 16px; font-weight: 300; line-height: 1.9; color: rgba(240,237,232,0.6); margin-bottom: 32px; max-width: 380px; border-left: 2px solid var(--orange); padding-left: 24px; }
+  .philosophy-pillars { display: flex; flex-direction: column; gap: 0; }
+  .pillar { padding: 28px 0; border-bottom: 1px solid var(--border); display: flex; gap: 24px; align-items: flex-start; }
   .pillar:first-child { border-top: 1px solid var(--border); }
-  .pillar-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 48px;
-    color: var(--muted);
-    line-height: 1;
-    min-width: 52px;
-  }
-  .pillar-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--white);
-    margin-bottom: 6px;
-  }
-  .pillar-body {
-    font-size: 14px;
-    font-weight: 300;
-    color: var(--grey);
-    line-height: 1.7;
-  }
-  .philosophy-img-block {
-    position: relative;
-  }
-  .philosophy-img {
-    width: 100%;
-    aspect-ratio: 3/4;
-    background: #1e1e1e;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-  }
-  .philosophy-img img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    filter: grayscale(60%) contrast(1.15);
-    opacity: 0.7;
-  }
-  .philosophy-img-label {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    padding: 40px 32px 32px;
-    background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, transparent 100%);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 36px;
-    letter-spacing: 2px;
-    color: var(--white);
-    line-height: 1.1;
-  }
+  .pillar-num { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--muted); line-height: 1; min-width: 52px; }
+  .pillar-title { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--white); margin-bottom: 6px; }
+  .pillar-body { font-size: 14px; font-weight: 300; color: var(--grey); line-height: 1.7; }
+  .philosophy-img-block { position: relative; }
+  .philosophy-img { width: 100%; aspect-ratio: 3/4; background: #1e1e1e; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+  .philosophy-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(60%) contrast(1.15); opacity: 0.7; }
+  .philosophy-img-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 40px 32px 32px; background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, transparent 100%); font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: var(--white); line-height: 1.1; }
   .philosophy-img-label span { color: var(--orange); }
-  .philosophy-accent {
-    position: absolute;
-    top: -20px; right: -20px;
-    width: 120px; height: 120px;
-    border: 1px solid var(--orange);
-    opacity: 0.3;
-    pointer-events: none;
-  }
+  .philosophy-accent { position: absolute; top: -20px; right: -20px; width: 120px; height: 120px; border: 1px solid var(--orange); opacity: 0.3; pointer-events: none; }
 
-  /* ─── STATS ─── */
-  #stats {
-    background: var(--black);
-    padding: 100px 60px;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-  .stats-header {
-    text-align: center;
-    margin-bottom: 80px;
-  }
-  .stats-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(48px, 6vw, 80px);
-    line-height: 1;
-    color: var(--white);
-  }
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    max-width: 1100px;
-    margin: 0 auto 80px;
-    border: 1px solid var(--border);
-  }
-  .stat-box {
-    padding: 48px 32px;
-    border-right: 1px solid var(--border);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    transition: background 0.3s;
-  }
+  /* STATS */
+  #stats { background: var(--black); padding: 100px 60px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .stats-header { text-align: center; margin-bottom: 80px; }
+  .stats-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 80px); line-height: 1; color: var(--white); }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; max-width: 1100px; margin: 0 auto 80px; border: 1px solid var(--border); }
+  .stat-box { padding: 48px 32px; border-right: 1px solid var(--border); text-align: center; position: relative; overflow: hidden; transition: background 0.3s; }
   .stat-box:last-child { border-right: none; }
   .stat-box:hover { background: var(--dark); }
-  .stat-box::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--orange);
-    transform: scaleX(0);
-    transition: transform 0.4s;
-  }
+  .stat-box::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--orange); transform: scaleX(0); transition: transform 0.4s; }
   .stat-box:hover::after { transform: scaleX(1); }
-  .stat-number {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 72px;
-    color: var(--orange);
-    line-height: 1;
-    margin-bottom: 8px;
-    display: block;
-  }
-  .stat-box-sub{
-    display:flex;
-    justify-content: center;
-  }
-  .stat-unit {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 60px;
-    color: var(--orange);
-    opacity: 1;
-  }
-  .stat-desc {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--grey-dim);
-  }
+  .stat-number { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: var(--orange); line-height: 1; margin-bottom: 8px; display: block; }
+  .stat-box-sub { display: flex; justify-content: center; }
+  .stat-unit { font-family: 'Bebas Neue', sans-serif; font-size: 60px; color: var(--orange); }
+  .stat-desc { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--grey-dim); }
 
-  /* Before/After slider */
-  .ba-container {
-    max-width: 700px;
-    margin: 0 auto;
-  }
-  .ba-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--grey);
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .ba-slider-wrap {
-    position: relative;
-    height: 420px;
-    background: var(--dark);
-    border: 1px solid var(--border);
-    overflow: hidden;
-    cursor: ew-resize;
-    user-select: none;
-  }
-  .ba-before, .ba-after {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .ba-before {
-    background: linear-gradient(135deg, var(--dark) 0%, #1a1a1a 100%);
-  }
-  .ba-after {
-    clip-path: inset(0 50% 0 0);
-    background: linear-gradient(135deg, #1e0a00 0%, #2d1200 100%);
-    border-right: 2px solid var(--orange);
-    transition: none;
-  }
-  .ba-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    letter-spacing: 3px;
-    color: var(--white);
-    margin-bottom: 12px;
-  }
-  .ba-sublabel {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--grey);
-  }
-  .ba-after .ba-label { color: var(--orange); }
-  .ba-handle {
-    position: absolute;
-    top: 0; bottom: 0;
-    width: 48px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-  }
-  .ba-handle-line {
-    width: 2px;
-    height: 100%;
-    background: var(--orange);
-    box-shadow: 0 0 12px var(--orange-glow);
-    position: absolute;
-  }
-  .ba-handle-circle {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--orange);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 18px;
-    color: var(--black);
-    font-weight: 700;
-    position: relative;
-    box-shadow: 0 0 20px var(--orange-glow);
-  }
+  /* BA SLIDER */
+  .ba-slider-wrap { position: relative; height: 420px; overflow: hidden; cursor: ew-resize; user-select: none; border: 1px solid var(--border); max-width: 700px; margin: 0 auto; }
+  .ba-before, .ba-after { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ba-after { clip-path: inset(0 50% 0 0); z-index: 2; }
+  .ba-before { z-index: 1; }
+  .ba-handle { position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; align-items: center; justify-content: center; width: 48px; pointer-events: none; }
+  .ba-handle-line { position: absolute; top: 0; bottom: 0; width: 2px; background: #FF4D00; box-shadow: 0 0 12px rgba(255,77,0,0.4); left: 50%; transform: translateX(-50%); }
+  .ba-handle-circle { width: 44px; height: 44px; border-radius: 50%; background: #FF4D00; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #000; font-weight: 700; position: relative; box-shadow: 0 0 20px rgba(255,77,0,0.4); z-index: 4; }
+  .ba-label { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: var(--white); margin-bottom: 6px; }
+  .ba-sublabel { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); }
 
-  /* custom */
-.ba-slider-wrap {
-  position: relative;
-  height: 420px;
-  overflow: hidden;
-  cursor: ew-resize;
-  user-select: none;
-}
-
-.ba-before,
-.ba-after {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.ba-after {
-  clip-path: inset(0 50% 0 0);
-  z-index: 2;
-}
-
-.ba-before {
-  z-index: 1;
-}
-
-.ba-handle {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  pointer-events: none;
-}
-
-.ba-handle-line {
-  position: absolute;
-  top: 0; bottom: 0;
-  width: 2px;
-  background: #FF4D00;
-  box-shadow: 0 0 12px rgba(255,77,0,0.4);
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.ba-handle-circle {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #FF4D00;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: #000;
-  font-weight: 700;
-  position: relative;
-  box-shadow: 0 0 20px rgba(255,77,0,0.4);
-  z-index: 4;
-}
-
-  /* end */
-
-  /* ─── COACHES ─── */
-  #coaches {
-    background: var(--charcoal);
-    padding: 120px 60px;
-  }
-  .coaches-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 64px;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .coaches-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(48px, 6vw, 80px);
-    color: var(--white);
-    line-height: 1;
-  }
-  .coaches-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .coach-card {
-    position: relative;
-    background: var(--dark);
-    overflow: hidden;
-    aspect-ratio: 3/4;
-    cursor: pointer;
-  }
-  .coach-img {
-    width: 100%; height: 100%;
-    background: var(--muted);
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 80px;
-    color: var(--border);
-    transition: transform 0.6s ease;
-  }
-  .coach-img img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    filter: grayscale(80%) contrast(1.1);
-    opacity: 0.5;
-    transition: filter 0.4s, opacity 0.4s;
-  }
-  .coach-card:hover .coach-img img {
-    filter: grayscale(20%) contrast(1.1);
-    opacity: 0.65;
-  }
+  /* COACHES */
+  #coaches { background: var(--charcoal); padding: 120px 60px; }
+  .coaches-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 64px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+  .coaches-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 80px); color: var(--white); line-height: 1; }
+  .coaches-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; max-width: 1200px; margin: 0 auto; }
+  .coach-card { position: relative; background: var(--dark); overflow: hidden; aspect-ratio: 3/4; cursor: pointer; }
+  .coach-img { width: 100%; height: 100%; background: var(--muted); position: absolute; inset: 0; font-family: 'Bebas Neue', sans-serif; font-size: 80px; color: var(--border); transition: transform 0.6s ease; }
+  .coach-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(80%) contrast(1.1); opacity: 0.5; transition: filter 0.4s, opacity 0.4s; }
+  .coach-card:hover .coach-img img { filter: grayscale(20%) contrast(1.1); opacity: 0.65; }
   .coach-card:hover .coach-img { transform: scale(1.06); }
-  .coach-overlay {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    padding: 32px 28px;
-    background: linear-gradient(to top, rgba(10,10,10,0.98) 0%, rgba(10,10,10,0.6) 60%, transparent 100%);
-  }
-  .coach-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    letter-spacing: 2px;
-    color: var(--white);
-    line-height: 1;
-  }
-  .coach-role {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--orange);
-    margin-top: 4px;
-    margin-bottom: 0;
-    transition: margin-bottom 0.3s;
-  }
-  .coach-expertise {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease, opacity 0.3s;
-    opacity: 0;
-    margin-top: 12px;
-  }
-  .coach-card:hover .coach-expertise {
-    max-height: 120px;
-    opacity: 1;
-  }
-  .expertise-tag {
-    display: inline-block;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--black);
-    background: var(--orange);
-    padding: 4px 10px;
-    margin: 3px 3px 0 0;
-  }
-  .coach-exp-text {
-    font-size: 13px;
-    font-weight: 300;
-    color: rgba(240,237,232,0.55);
-    margin-top: 10px;
-    line-height: 1.6;
-  }
+  .coach-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 32px 28px; background: linear-gradient(to top, rgba(10,10,10,0.98) 0%, rgba(10,10,10,0.6) 60%, transparent 100%); }
+  .coach-name { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 2px; color: var(--white); line-height: 1; }
+  .coach-role { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); margin-top: 4px; }
+  .coach-expertise { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s; opacity: 0; margin-top: 12px; }
+  .coach-card:hover .coach-expertise { max-height: 120px; opacity: 1; }
+  .expertise-tag { display: inline-block; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--black); background: var(--orange); padding: 4px 10px; margin: 3px 3px 0 0; }
+  .coach-exp-text { font-size: 13px; font-weight: 300; color: rgba(240,237,232,0.55); margin-top: 10px; line-height: 1.6; }
 
-  /* ─── PROGRAMS ─── */
-  #programs {
-    background: var(--black);
-    padding: 120px 60px;
-  }
-  .programs-layout {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .programs-top {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-bottom: 80px;
-  }
-  .programs-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(56px, 7vw, 96px);
-    line-height: 0.95;
-    color: var(--white);
-  }
-  .programs-sub {
-    max-width: 280px;
-    font-size: 14px;
-    font-weight: 300;
-    color: var(--grey);
-    line-height: 1.8;
-    margin-bottom: 8px;
-  }
-  .programs-list {
-    display: flex;
-    flex-direction: column;
-  }
-  .program-item {
-    border-top: 1px solid var(--border);
-    padding: 40px 0;
-    display: grid;
-    grid-template-columns: 80px 1fr auto;
-    gap: 32px;
-    align-items: center;
-    cursor: pointer;
-    transition: background 0.2s;
-    padding-left: 16px;
-    padding-right: 16px;
-    position: relative;
-    overflow: hidden;
-  }
+  /* PROGRAMS */
+  #programs { background: var(--black); padding: 120px 60px; }
+  .programs-layout { max-width: 1200px; margin: 0 auto; }
+  .programs-top { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 80px; }
+  .programs-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 7vw, 96px); line-height: 0.95; color: var(--white); }
+  .programs-sub { max-width: 280px; font-size: 14px; font-weight: 300; color: var(--grey); line-height: 1.8; margin-bottom: 8px; }
+  .programs-list { display: flex; flex-direction: column; }
+  .program-item { border-top: 1px solid var(--border); padding: 40px 16px; display: grid; grid-template-columns: 80px 1fr auto; gap: 32px; align-items: center; cursor: pointer; transition: background 0.2s; position: relative; overflow: hidden; }
   .program-item:last-child { border-bottom: 1px solid var(--border); }
-  .program-item::after {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: var(--orange);
-    transform: scaleY(0);
-    transition: transform 0.3s;
-    transform-origin: bottom;
-  }
+  .program-item::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--orange); transform: scaleY(0); transition: transform 0.3s; transform-origin: bottom; }
   .program-item:hover::after { transform: scaleY(1); }
-  .program-item:hover {
-    background: rgba(255,77,0,0.03);
-  }
-  .program-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 56px;
-    color: var(--border);
-    line-height: 1;
-    transition: color 0.3s;
-  }
+  .program-item:hover { background: rgba(255,77,0,0.03); }
+  .program-num { font-family: 'Bebas Neue', sans-serif; font-size: 56px; color: var(--border); line-height: 1; transition: color 0.3s; }
   .program-item:hover .program-num { color: var(--orange); }
-  .program-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(36px, 4vw, 56px);
-    color: var(--white);
-    line-height: 1;
-    transition: color 0.2s;
-    letter-spacing: 1px;
-  }
+  .program-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 4vw, 56px); color: var(--white); line-height: 1; transition: color 0.2s; letter-spacing: 1px; }
   .program-item:hover .program-name { color: var(--orange); }
-  .program-desc {
-    font-size: 13px;
-    font-weight: 300;
-    color: var(--grey-dim);
-    margin-top: 6px;
-    line-height: 1.6;
-    max-width: 480px;
-  }
-  .program-arrow {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 24px;
-    color: var(--grey-dim);
-    transition: color 0.2s, transform 0.3s;
-  }
-  .program-item:hover .program-arrow {
-    color: var(--orange);
-    transform: translateX(8px);
-    text-shadow: 0 0 12px var(--orange-glow);
-  }
-  .program-tags {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-  }
-  .ptag {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--grey-dim);
-    border: 1px solid var(--border);
-    padding: 3px 10px;
-  }
+  .program-desc { font-size: 13px; font-weight: 300; color: var(--grey-dim); margin-top: 6px; line-height: 1.6; max-width: 480px; }
+  .program-arrow { font-family: 'Barlow Condensed', sans-serif; font-size: 24px; color: var(--grey-dim); transition: color 0.2s, transform 0.3s; }
+  .program-item:hover .program-arrow { color: var(--orange); transform: translateX(8px); text-shadow: 0 0 12px var(--orange-glow); }
+  .program-tags { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .ptag { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--grey-dim); border: 1px solid var(--border); padding: 3px 10px; }
 
-  /* ─── MEMBERSHIP ─── */
-  #membership {
-    background: var(--charcoal);
-    padding: 120px 60px;
-  }
-  .membership-layout {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .membership-header {
-    /* margin-bottom: 60px; */
-    max-width: 1200px;
-    margin: 0 auto 64px;
-    display: flex;
-    align-items: flex-end;
-    gap: 40px;
-    justify-content: space-between;
-  }
-  .membership-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(48px, 6vw, 80px);
-    color: var(--white);
-    line-height: 1;
-    margin-bottom: 16px;
-  }
-  .membership-note {
-    font-size: 15px;
-    font-weight: 300;
-    color: var(--grey);
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 26px;
-  }
-  .membership-note::before {
-    content: '✓';
-    color: var(--orange);
-    font-weight: 700;
-  }
-  .plans-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-  }
-  .plan {
-    background: var(--dark);
-    padding: 48px 36px;
-    position: relative;
-    border: 1px solid var(--border);
-    transition: border-color 0.3s;
-  }
+  /* MEMBERSHIP */
+  #membership { background: var(--charcoal); padding: 120px 60px; }
+  .membership-layout { max-width: 1100px; margin: 0 auto; }
+  .membership-header { max-width: 1200px; margin: 0 auto 64px; display: flex; align-items: flex-end; gap: 40px; justify-content: space-between; }
+  .membership-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 80px); color: var(--white); line-height: 1; margin-bottom: 16px; }
+  .membership-note { font-size: 15px; font-weight: 300; color: var(--grey); display: flex; gap: 8px; align-items: center; margin-bottom: 26px; }
+  .membership-note::before { content: '✓'; color: var(--orange); font-weight: 700; }
+  .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .plan { background: var(--dark); padding: 48px 36px; position: relative; border: 1px solid var(--border); transition: border-color 0.3s; }
   .plan:hover { border-color: var(--grey-dim); }
-  .plan.featured {
-    border-color: var(--orange);
-    background: var(--dark);
-  }
-  .plan.featured:hover { border-color: var(--orange); box-shadow: 0 0 40px rgba(255,77,0,0.08); }
-  .plan-badge {
-    position: absolute;
-    top: -1px; right: 32px;
-    background: var(--orange);
-    color: var(--black);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 5px 14px;
-  }
-  .plan-name {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--grey);
-    margin-bottom: 24px;
-  }
-  .plan-price {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 80px;
-    color: var(--white);
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .plan-price span {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 24px;
-    color: var(--grey);
-    font-weight: 400;
-  }
-  .plan-period {
-    font-size: 13px;
-    color: var(--grey-dim);
-    margin-bottom: 40px;
-    font-weight: 300;
-  }
-  .plan-features {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-bottom: 40px;
-  }
-  .plan-features li {
-    font-size: 14px;
-    font-weight: 300;
-    color: rgba(240,237,232,0.7);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    line-height: 1.5;
-  }
-  .plan-features li::before {
-    content: '—';
-    color: var(--orange);
-    font-weight: 700;
-    flex-shrink: 0;
-  }
+  .plan.featured { border-color: var(--orange); }
+  .plan.featured:hover { box-shadow: 0 0 40px rgba(255,77,0,0.08); }
+  .plan-badge { position: absolute; top: -1px; right: 32px; background: var(--orange); color: var(--black); font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 5px 14px; }
+  .plan-name { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--grey); margin-bottom: 24px; }
+  .plan-price { font-family: 'Bebas Neue', sans-serif; font-size: 80px; color: var(--white); line-height: 1; margin-bottom: 4px; }
+  .plan-price span { font-family: 'Barlow Condensed', sans-serif; font-size: 24px; color: var(--grey); font-weight: 400; }
+  .plan-period { font-size: 13px; color: var(--grey-dim); margin-bottom: 40px; font-weight: 300; }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
+  .plan-features li { font-size: 14px; font-weight: 300; color: rgba(240,237,232,0.7); display: flex; align-items: center; gap: 10px; line-height: 1.5; }
+  .plan-features li::before { content: '—'; color: var(--orange); font-weight: 700; flex-shrink: 0; }
   .plan-features li.dim { color: var(--grey-dim); }
   .plan-features li.dim::before { color: var(--border); }
-  .plan-btn {
-    display: block;
-    text-align: center;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    padding: 16px;
-    text-decoration: none;
-    transition: all 0.3s;
-  }
-  .plan-btn-outline {
-    color: var(--white);
-    border: 1px solid var(--border);
-  }
-  .plan-btn-outline:hover {
-    border-color: var(--white);
-    background: rgba(240,237,232,0.05);
-  }
-  .plan-btn-solid {
-    color: var(--black);
-    background: var(--orange);
-  }
-  .plan-btn-solid:hover {
-    box-shadow: 0 0 32px var(--orange-glow);
-    transform: scale(1.02);
-  }
-  .trust-row {
-    display: flex;
-    gap: 40px;
-    margin-top: 48px;
-    flex-wrap: wrap;
-  }
-  .trust-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    font-weight: 300;
-    color: var(--grey);
-  }
-  .trust-icon {
-    color: var(--orange);
-    font-size: 16px;
-  }
+  .plan-btn { display: block; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 16px; text-decoration: none; transition: all 0.3s; }
+  .plan-btn-outline { color: var(--white); border: 1px solid var(--border); }
+  .plan-btn-outline:hover { border-color: var(--white); background: rgba(240,237,232,0.05); }
+  .plan-btn-solid { color: var(--black); background: var(--orange); }
+  .plan-btn-solid:hover { box-shadow: 0 0 32px var(--orange-glow); transform: scale(1.02); }
+  .trust-row { display: flex; gap: 40px; margin-top: 48px; flex-wrap: wrap; }
+  .trust-item { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 300; color: var(--grey); }
+  .trust-icon { color: var(--orange); font-size: 16px; }
 
-  /* ─── ENVIRONMENT / GALLERY ─── */
-  #environment {
-    background: var(--black);
-    padding: 120px 60px;
-  }
-  .env-header {
-    max-width: 1200px;
-    margin: 0 auto 64px;
-    display: flex;
-    align-items: flex-end;
-    gap: 40px;
-    justify-content: space-between;
-  }
-  .env-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(48px, 6vw, 80px);
-    color: var(--white);
-    line-height: 1;
-  }
-  .env-sub {
-    max-width: 300px;
-    font-size: 14px;
-    font-weight: 300;
-    color: var(--grey);
-    line-height: 1.8;
-  }
-  .masonry {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: auto;
-    gap: 4px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .masonry-item {
-    background: var(--dark);
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .masonry-item img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    filter: grayscale(40%) contrast(1.1);
-    opacity: 0.65;
-    transition: transform 0.6s ease, filter 0.4s, opacity 0.4s;
-  }
-  .masonry-item:hover img {
-    transform: scale(1.05);
-    filter: grayscale(0%) contrast(1.1);
-    opacity: 0.8;
-  }
-  .masonry-item-label {
-    position: absolute;
-    bottom: 12px; left: 16px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(240,237,232,0.4);
-    transition: color 0.3s;
-  }
+  /* ENVIRONMENT */
+  #environment { background: var(--black); padding: 120px 60px; }
+  .env-header { max-width: 1200px; margin: 0 auto 64px; display: flex; align-items: flex-end; gap: 40px; justify-content: space-between; }
+  .env-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 80px); color: var(--white); line-height: 1; }
+  .env-sub { max-width: 300px; font-size: 14px; font-weight: 300; color: var(--grey); line-height: 1.8; }
+  .masonry { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; max-width: 1200px; margin: 0 auto; }
+  .masonry-item { background: var(--dark); overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+  .masonry-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(40%) contrast(1.1); opacity: 0.65; transition: transform 0.6s ease, filter 0.4s, opacity 0.4s; }
+  .masonry-item:hover img { transform: scale(1.05); filter: grayscale(0%) contrast(1.1); opacity: 0.8; }
+  .masonry-item-label { position: absolute; bottom: 12px; left: 16px; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(240,237,232,0.4); transition: color 0.3s; }
   .masonry-item:hover .masonry-item-label { color: var(--orange); }
-  .masonry-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    letter-spacing: 2px;
-    color: var(--border);
-    position: absolute;
-    opacity: 0;
-  }
-/* .masonry-placeholder:hover{
-  opacity: 1;
-  background-color: #00000080;
-  color:var(--orange);
-} */
+  .masonry-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; color: var(--border); position: absolute; opacity: 0; }
   .m1 { grid-column: 1 / 6; grid-row: 1 / 3; min-height: 320px; }
   .m2 { grid-column: 6 / 9; grid-row: 1; min-height: 156px; }
   .m3 { grid-column: 9 / 13; grid-row: 1; min-height: 156px; }
@@ -1116,180 +470,45 @@
   .m7 { grid-column: 4 / 8; grid-row: 3; min-height: 200px; }
   .m8 { grid-column: 8 / 13; grid-row: 3; min-height: 200px; }
 
-  /* ─── FINAL CTA ─── */
-  #final-cta {
-    background: var(--charcoal);
-    padding: 160px 60px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    border-top: 1px solid var(--border);
-  }
-  .cta-bg-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(120px, 18vw, 280px);
-    color: rgba(255,77,0,0.03);
-    white-space: nowrap;
-    pointer-events: none;
-    letter-spacing: 4px;
-    line-height: 1;
-  }
-  .cta-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--orange);
-    margin-bottom: 32px;
-  }
-  .cta-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(56px, 9vw, 120px);
-    line-height: 0.95;
-    color: var(--white);
-    margin-bottom: 32px;
-    letter-spacing: 2px;
-    position: relative;
-    z-index: 1;
-  }
+  /* FINAL CTA */
+  #final-cta { background: var(--charcoal); padding: 160px 60px; text-align: center; position: relative; overflow: hidden; border-top: 1px solid var(--border); }
+  .cta-bg-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Bebas Neue', sans-serif; font-size: clamp(120px, 18vw, 280px); color: rgba(255,77,0,0.03); white-space: nowrap; pointer-events: none; letter-spacing: 4px; line-height: 1; }
+  .cta-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--orange); margin-bottom: 32px; }
+  .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 9vw, 120px); line-height: 0.95; color: var(--white); margin-bottom: 32px; letter-spacing: 2px; position: relative; z-index: 1; }
   .cta-title .orange { color: var(--orange); }
-  .cta-sub {
-    font-size: 16px;
-    font-weight: 300;
-    color: var(--grey);
-    margin-bottom: 56px;
-    max-width: 460px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.7;
-  }
-  .cta-btn-wrap {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    position: relative;
-    z-index: 1;
-  }
-  .btn-primary {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--black);
-    background: var(--orange);
-    padding: 20px 56px;
-    text-decoration: none;
-    transition: box-shadow 0.3s, transform 0.2s;
-    display: inline-block;
-  }
-  .btn-primary:hover {
-    box-shadow: 0 0 60px var(--orange-glow), 0 0 120px rgba(255,77,0,0.1);
-    transform: scale(1.04);
-  }
-  .btn-ghost {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--grey);
-    text-decoration: none;
-    border: 1px solid var(--border);
-    padding: 20px 40px;
-    transition: all 0.3s;
-    display: inline-block;
-  }
-  .btn-ghost:hover {
-    color: var(--white);
-    border-color: var(--grey-dim);
-  }
+  .cta-sub { font-size: 16px; font-weight: 300; color: var(--grey); margin-bottom: 56px; max-width: 460px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  .cta-btn-wrap { display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; position: relative; z-index: 1; }
+  .btn-primary { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--black); background: var(--orange); padding: 20px 56px; text-decoration: none; transition: box-shadow 0.3s, transform 0.2s; display: inline-block; }
+  .btn-primary:hover { box-shadow: 0 0 60px var(--orange-glow), 0 0 120px rgba(255,77,0,0.1); transform: scale(1.04); }
+  .btn-ghost { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--grey); text-decoration: none; border: 1px solid var(--border); padding: 20px 40px; transition: all 0.3s; display: inline-block; }
+  .btn-ghost:hover { color: var(--white); border-color: var(--grey-dim); }
 
-  /* ─── FOOTER ─── */
-  footer {
-    background: var(--black);
-    padding: 60px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 24px;
-  }
-  .footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 24px;
-    letter-spacing: 4px;
-    color: var(--grey-dim);
-    text-decoration: none;
-  }
+  /* FOOTER */
+  footer { background: var(--black); padding: 60px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 4px; color: var(--grey-dim); text-decoration: none; }
   .footer-logo span { color: var(--orange); opacity: 0.6; }
-  .footer-copy {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--border);
-  }
-  .footer-links {
-    display: flex;
-    gap: 28px;
-    list-style: none;
-  }
-  .footer-links a {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--grey-dim);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
+  .footer-copy { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--border); }
+  .footer-links { display: flex; gap: 28px; list-style: none; }
+  .footer-links a { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey-dim); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--orange); }
 
-  /* ─── REVEAL ANIMATIONS ─── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .reveal-left {
-    opacity: 0;
-    transform: translateX(-40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal-left.visible {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  .reveal-right {
-    opacity: 0;
-    transform: translateX(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal-right.visible {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
 
   /* ─── MOBILE ─── */
   @media (max-width: 900px) {
     nav { padding: 16px 24px; }
     nav.scrolled { padding: 12px 24px; }
-    .nav-links { display: none; }
+    .nav-links { display: none !important; }
+    .nav-cta { display: none; }
+    .hamburger { display: flex; }
     .hero-content { padding: 72px 24px; }
-    .hero-stats { right: 0; bottom: 0; flex-direction: row;text-align: center; }
+    .hero-stats { right: 0; bottom: 0; flex-direction: row; text-align: center; }
     #philosophy { padding: 80px 24px; }
     .philosophy-grid { grid-template-columns: 1fr; gap: 48px; }
     .philosophy-img-block { order: -1; }
@@ -1298,23 +517,23 @@
     .stat-box { padding: 32px 20px; }
     .stat-box:nth-child(2) { border-right: none; }
     .stat-box:nth-child(3) { border-top: 1px solid var(--border); }
-    .coaches-header{display: block;}
-    .coaches-header div{margin-bottom:10px;}
+    .coaches-header { display: block; }
+    .coaches-header div { margin-bottom: 10px; }
     #coaches { padding: 80px 24px; }
     .coaches-grid { grid-template-columns: 1fr; }
     .coach-card { aspect-ratio: 4/3; }
     #programs { padding: 80px 24px; }
-    .programs-top { flex-direction: column; gap: 24px;align-items: flex-start; }
-    .program-item { grid-template-columns: 48px 1fr auto; gap: 16px; }
+    .programs-top { flex-direction: column; gap: 24px; align-items: flex-start; }
+    .program-item { grid-template-columns: 1fr; gap: 16px; }
     .program-num { font-size: 36px; }
-    .membership-header {flex-direction: column;gap: 20px;align-items: flex-start;}
+    .membership-header { flex-direction: column; gap: 20px; align-items: flex-start; }
     #membership { padding: 80px 24px; }
-    .trust-row { gap: 20px;}
-    .env-header {align-items: flex-start;flex-direction: column;}
+    .trust-row { gap: 20px; }
+    .env-header { align-items: flex-start; flex-direction: column; }
     .plans-grid { grid-template-columns: 1fr; }
     #environment { padding: 80px 24px; }
     .masonry { grid-template-columns: repeat(2, 1fr); }
-    .m1 { grid-column: 1 / 3; grid-row: 1;min-height: 240px; }
+    .m1 { grid-column: 1 / 3; grid-row: 1; min-height: 240px; }
     .m2 { grid-column: 1 / 2; grid-row: 2; min-height: 160px; }
     .m3 { grid-column: 2 / 3; grid-row: 2; min-height: 160px; }
     .m4 { grid-column: 1 / 2; grid-row: 3; min-height: 160px; }
@@ -1331,9 +550,35 @@
 
 <div id="progress-bar"></div>
 
+<!-- OVERLAY -->
+<div class="side-overlay" id="side-overlay" onclick="closeMenu()"></div>
+
+<!-- SIDE PANEL (slides in from right) -->
+<div class="side-panel" id="side-panel">
+  <div class="side-panel-header">
+    <a href="index.html" class="side-panel-logo">V<span>FIT</span></a>
+  </div>
+  <ul class="side-nav">
+    <li><a href="about.html">About <span class="arrow">→</span></a></li>
+    <li><a href="programs.html">Programs <span class="arrow">→</span></a></li>
+    <li><a href="coaches.html">Coaches <span class="arrow">→</span></a></li>
+    <li><a href="gallery.html">Gallery <span class="arrow">→</span></a></li>
+    <li><a href="blog.html">Blog <span class="arrow">→</span></a></li>
+    <li><a href="contact.html">Contact <span class="arrow">→</span></a></li>
+  </ul>
+  <div class="side-panel-footer">
+    <a href="contact.html" class="side-cta">Join Now — Free Trial</a>
+    <div class="side-info">
+      <a href="tel:+919876543210"><b>◉</b> +91 98765 43210</a>
+      <a href="mailto:train@vfitgym.in"><b>◉</b> train@vfitgym.in</a>
+      <a href="#"><b>◉</b> Cuddalore, Tamil Nadu</a>
+    </div>
+  </div>
+</div>
+
 <!-- NAVBAR -->
 <nav id="navbar">
-  <a href="#" class="nav-logo">V<span>FIT</span></a>
+  <a href="index.html" class="nav-logo">V<span>FIT</span></a>
   <ul class="nav-links">
     <li><a href="about.html">About</a></li>
     <li><a href="programs.html">Programs</a></li>
@@ -1343,45 +588,29 @@
     <li><a href="contact.html">Contact</a></li>
   </ul>
   <a href="contact.html" class="nav-cta">Join Now</a>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Open menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
   <div class="hero-bg"></div>
-  <!-- Using a real gym-style placeholder; replace with actual gym image -->
-  <img
-    class="hero-img"
-    src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80&fit=crop&crop=center"
-    alt="Hardcore gym training"
-    onerror="this.style.display='none'"
-  >
+  <img class="hero-img" src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=80&fit=crop&crop=center" alt="Hardcore gym training" onerror="this.style.display='none'">
   <div class="hero-content">
     <div class="hero-tag">Est. 2018 · Cuddalore</div>
-    <h1 class="hero-h1">
-      NO EXCUSES.<br>
-      <span class="line-orange">JUST</span> RESULTS.
-    </h1>
+    <h1 class="hero-h1">NO EXCUSES.<br><span class="line-orange">JUST</span> RESULTS.</h1>
     <p class="hero-sub">Train real. Stay consistent. Transform.</p>
     <a href="#membership" class="hero-cta">Start Your Journey</a>
   </div>
   <div class="hero-stats">
-    <div>
-      <div class="hero-stat-num">500<span style="font-size:28px">+</span></div>
-      <div class="hero-stat-label">Members Strong</div>
-    </div>
-    <div>
-      <div class="hero-stat-num">6</div>
-      <div class="hero-stat-label">Years of Training</div>
-    </div>
-    <div>
-      <div class="hero-stat-num">92<span style="font-size:28px">%</span></div>
-      <div class="hero-stat-label">Success Rate</div>
-    </div>
+    <div><div class="hero-stat-num">500<span style="font-size:28px">+</span></div><div class="hero-stat-label">Members Strong</div></div>
+    <div><div class="hero-stat-num">6</div><div class="hero-stat-label">Years of Training</div></div>
+    <div><div class="hero-stat-num">92<span style="font-size:28px">%</span></div><div class="hero-stat-label">Success Rate</div></div>
   </div>
-  <div class="scroll-indicator">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
+  <div class="scroll-indicator"><span>Scroll</span><div class="scroll-line"></div></div>
 </section>
 
 <!-- PHILOSOPHY -->
@@ -1390,45 +619,18 @@
     <div class="reveal-left">
       <div class="section-label">Our Philosophy</div>
       <h2 class="philosophy-big-text">REAL<br><em>TRAINING.</em><br>REAL RESULTS.</h2>
-      <p class="philosophy-body">
-        We don't sell dreams. We build discipline. Every rep, every set, every session 
-        is designed to push your limits — not pamper your excuses.
-      </p>
+      <p class="philosophy-body">We don't sell dreams. We build discipline. Every rep, every set, every session is designed to push your limits — not pamper your excuses.</p>
       <div class="philosophy-pillars">
-        <div class="pillar">
-          <div class="pillar-num">01</div>
-          <div>
-            <div class="pillar-title">Correct Form First</div>
-            <div class="pillar-body">Build the foundation right. Technique beats weight, always. Injury-free training is not optional.</div>
-          </div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-num">02</div>
-          <div>
-            <div class="pillar-title">Consistent Effort</div>
-            <div class="pillar-body">Progress is built on showing up. Not motivation, not mood — commitment to the process.</div>
-          </div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-num">03</div>
-          <div>
-            <div class="pillar-title">Measurable Progress</div>
-            <div class="pillar-body">Numbers don't lie. We track, adjust, and push — because you deserve to see how far you've come.</div>
-          </div>
-        </div>
+        <div class="pillar"><div class="pillar-num">01</div><div><div class="pillar-title">Correct Form First</div><div class="pillar-body">Build the foundation right. Technique beats weight, always. Injury-free training is not optional.</div></div></div>
+        <div class="pillar"><div class="pillar-num">02</div><div><div class="pillar-title">Consistent Effort</div><div class="pillar-body">Progress is built on showing up. Not motivation, not mood — commitment to the process.</div></div></div>
+        <div class="pillar"><div class="pillar-num">03</div><div><div class="pillar-title">Measurable Progress</div><div class="pillar-body">Numbers don't lie. We track, adjust, and push — because you deserve to see how far you've come.</div></div></div>
       </div>
     </div>
     <div class="philosophy-img-block reveal-right">
       <div class="philosophy-accent"></div>
       <div class="philosophy-img">
-        <img
-          src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80&fit=crop&crop=center"
-          alt="Gym training"
-          onerror="this.parentElement.innerHTML='<div class=masonry-placeholder style=font-size:40px;width:100%;height:100%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;>VFIT</div>'"
-        >
-        <div class="philosophy-img-label">
-          YOUR<br>LIMIT IS<br>A <span>STARTING POINT</span>
-        </div>
+        <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80&fit=crop&crop=center" alt="Gym training" onerror="this.parentElement.innerHTML='<div style=font-size:40px;width:100%;height:100%;background:#1a1a1a;display:flex;align-items:center;justify-content:center;>VFIT</div>'">
+        <div class="philosophy-img-label">YOUR<br>LIMIT IS<br>A <span>STARTING POINT</span></div>
       </div>
     </div>
   </div>
@@ -1441,51 +643,25 @@
     <h2 class="stats-title">THE NUMBERS SPEAK</h2>
   </div>
   <div class="stats-grid reveal">
-    <div class="stat-box">
-      <span class="stat-number" data-target="500">0</span>
-      <div class="stat-desc">Active Members</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-box-sub">
-        <span class="stat-number" data-target="92">0</span>
-        <span class="stat-unit" style="display:block;text-align:center;margin-bottom:8px">%</span>
-      </div>
-      <div class="stat-desc">Goal Achievement Rate</div>
-    </div>
-    <div class="stat-box">
-      <span class="stat-number" data-target="6">0</span>
-      <div class="stat-desc">Years Transforming Lives</div>
-    </div>
-    <div class="stat-box">
-      <span class="stat-number" data-target="30">0</span>
-      <div class="stat-desc">Expert Coaches</div>
-    </div>
+    <div class="stat-box"><span class="stat-number" data-target="500">0</span><div class="stat-desc">Active Members</div></div>
+    <div class="stat-box"><div class="stat-box-sub"><span class="stat-number" data-target="92">0</span><span class="stat-unit">%</span></div><div class="stat-desc">Goal Achievement Rate</div></div>
+    <div class="stat-box"><span class="stat-number" data-target="6">0</span><div class="stat-desc">Years Transforming Lives</div></div>
+    <div class="stat-box"><span class="stat-number" data-target="30">0</span><div class="stat-desc">Expert Coaches</div></div>
   </div>
-
   <!-- Before/After Slider -->
   <div class="ba-slider-wrap" id="ba-wrap">
     <div class="ba-after" id="ba-after">
-  <img 
-    src="https://i.pinimg.com/1200x/78/50/c4/7850c4658e0966b1d9fd2f6e8e9b12a6.jpg"
-    alt="After transformation"
-    style="width:100%;height:100%;object-fit:cover;display:block;"
-  >
-  <div class="ba-overlay-label" style="position:absolute;bottom:20px;left:20px;background: #000000c2;padding:14px;">
-    <div class="ba-label">AFTER</div>
-    <div class="ba-sublabel">90 Days · Consistent Training</div>
-  </div>
-</div>
+      <img src="https://i.pinimg.com/1200x/78/50/c4/7850c4658e0966b1d9fd2f6e8e9b12a6.jpg" alt="After transformation" style="width:100%;height:100%;object-fit:cover;display:block;">
+      <div style="position:absolute;bottom:20px;left:20px;background:rgba(0,0,0,0.76);padding:14px;">
+        <div class="ba-label">AFTER</div><div class="ba-sublabel">90 Days · Consistent Training</div>
+      </div>
+    </div>
     <div class="ba-before">
-  <img 
-    src="https://images.unsplash.com/photo-1594381898411-846e7d193883?w=800&q=80&fit=crop&crop=top"
-    alt="Before transformation"
-    style="width:100%;height:100%;object-fit:cover;display:block;"
-  >
-  <div class="ba-overlay-label" style="position:absolute;bottom:20px;right:20px;text-align:right;background: #000000c2;padding:14px;">
-    <div class="ba-label">BEFORE</div>
-    <div class="ba-sublabel">Day 1 · Starting Point</div>
-  </div>
-</div>
+      <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?w=800&q=80&fit=crop&crop=top" alt="Before transformation" style="width:100%;height:100%;object-fit:cover;display:block;">
+      <div style="position:absolute;bottom:20px;right:20px;text-align:right;background:rgba(0,0,0,0.76);padding:14px;">
+        <div class="ba-label">BEFORE</div><div class="ba-sublabel">Day 1 · Starting Point</div>
+      </div>
+    </div>
     <div class="ba-handle" id="ba-handle">
       <div class="ba-handle-line"></div>
       <div class="ba-handle-circle">⟺</div>
@@ -1500,55 +676,20 @@
       <div class="section-label">The Team</div>
       <h2 class="coaches-title">YOUR<br>MENTORS</h2>
     </div>
-    <p style="max-width:280px;font-size:14px;font-weight:300;color:var(--grey);line-height:1.8;">
-      Not model trainers. Real coaches who've been in the trenches — and know how to get you through yours.
-    </p>
+    <p style="max-width:280px;font-size:14px;font-weight:300;color:var(--grey);line-height:1.8;">Not model trainers. Real coaches who've been in the trenches — and know how to get you through yours.</p>
   </div>
   <div class="coaches-grid">
     <div class="coach-card reveal">
-      <div class="coach-img">
-        <img src="https://i.pinimg.com/736x/79/8d/64/798d646e8325ace8523995716c048123.jpg" alt="Coach" onerror="this.style.display='none'">
-      </div>
-      <div class="coach-overlay">
-        <div class="coach-name">RAJAN K.</div>
-        <div class="coach-role">Head Strength Coach</div>
-        <div class="coach-expertise">
-          <span class="expertise-tag">Powerlifting</span>
-          <span class="expertise-tag">Hypertrophy</span>
-          <span class="expertise-tag">Rehab</span>
-          <div class="coach-exp-text">12 years of competitive lifting. Specialises in form correction and progressive overload methodology.</div>
-        </div>
-      </div>
+      <div class="coach-img"><img src="https://i.pinimg.com/736x/79/8d/64/798d646e8325ace8523995716c048123.jpg" alt="Coach" onerror="this.style.display='none'"></div>
+      <div class="coach-overlay"><div class="coach-name">RAJAN K.</div><div class="coach-role">Head Strength Coach</div><div class="coach-expertise"><span class="expertise-tag">Powerlifting</span><span class="expertise-tag">Hypertrophy</span><span class="expertise-tag">Rehab</span><div class="coach-exp-text">12 years of competitive lifting. Specialises in form correction and progressive overload methodology.</div></div></div>
     </div>
     <div class="coach-card reveal" style="transition-delay:0.1s">
-      <div class="coach-img">
-        <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80&fit=crop&crop=face" alt="Coach" onerror="this.style.display='none'">
-      </div>
-      <div class="coach-overlay">
-        <div class="coach-name">PRIYA S.</div>
-        <div class="coach-role">Transformation Coach</div>
-        <div class="coach-expertise">
-          <span class="expertise-tag">Fat Loss</span>
-          <span class="expertise-tag">Nutrition</span>
-          <span class="expertise-tag">HIIT</span>
-          <div class="coach-exp-text">Helped 200+ members achieve sustainable transformations through evidence-based training and diet.</div>
-        </div>
-      </div>
+      <div class="coach-img"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80&fit=crop&crop=face" alt="Coach" onerror="this.style.display='none'"></div>
+      <div class="coach-overlay"><div class="coach-name">PRIYA S.</div><div class="coach-role">Transformation Coach</div><div class="coach-expertise"><span class="expertise-tag">Fat Loss</span><span class="expertise-tag">Nutrition</span><span class="expertise-tag">HIIT</span><div class="coach-exp-text">Helped 200+ members achieve sustainable transformations through evidence-based training and diet.</div></div></div>
     </div>
     <div class="coach-card reveal" style="transition-delay:0.2s">
-      <div class="coach-img">
-        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=600&q=80&fit=crop&crop=face" alt="Coach" onerror="this.style.display='none'">
-      </div>
-      <div class="coach-overlay">
-        <div class="coach-name">ARJUN M.</div>
-        <div class="coach-role">Athletic Performance</div>
-        <div class="coach-expertise">
-          <span class="expertise-tag">Conditioning</span>
-          <span class="expertise-tag">Speed</span>
-          <span class="expertise-tag">Endurance</span>
-          <div class="coach-exp-text">Former state-level athlete. Trains sportspersons and beginners alike with equal intensity and precision.</div>
-        </div>
-      </div>
+      <div class="coach-img"><img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=600&q=80&fit=crop&crop=face" alt="Coach" onerror="this.style.display='none'"></div>
+      <div class="coach-overlay"><div class="coach-name">ARJUN M.</div><div class="coach-role">Athletic Performance</div><div class="coach-expertise"><span class="expertise-tag">Conditioning</span><span class="expertise-tag">Speed</span><span class="expertise-tag">Endurance</span><div class="coach-exp-text">Former state-level athlete. Trains sportspersons and beginners alike with equal intensity and precision.</div></div></div>
     </div>
   </div>
 </section>
@@ -1561,64 +702,13 @@
         <div class="section-label">Training Programs</div>
         <h2 class="programs-title">PICK<br>YOUR FIGHT</h2>
       </div>
-      <p class="programs-sub reveal-right">
-        Every program is designed around real results — not gym aesthetics, 
-        not Instagram moments. Choose your path and commit to it.
-      </p>
+      <p class="programs-sub reveal-right">Every program is designed around real results — not gym aesthetics, not Instagram moments. Choose your path and commit to it.</p>
     </div>
     <div class="programs-list">
-      <div class="program-item reveal">
-        <div class="program-num">01</div>
-        <div>
-          <div class="program-name">Weight Loss</div>
-          <div class="program-desc">Metabolic training, caloric deficit coaching, and high-intensity circuits designed to strip fat and reveal the athlete inside you.</div>
-          <div class="program-tags">
-            <span class="ptag">3-5 days/week</span>
-            <span class="ptag">All levels</span>
-            <span class="ptag">Nutrition plan included</span>
-          </div>
-        </div>
-        <div class="program-arrow">→</div>
-      </div>
-      <div class="program-item reveal">
-        <div class="program-num">02</div>
-        <div>
-          <div class="program-name">Strength Training</div>
-          <div class="program-desc">Compound lifts, progressive overload, and periodised programming to build raw, functional strength from the ground up.</div>
-          <div class="program-tags">
-            <span class="ptag">4-6 days/week</span>
-            <span class="ptag">Beginner to advanced</span>
-            <span class="ptag">1-on-1 coaching</span>
-          </div>
-        </div>
-        <div class="program-arrow">→</div>
-      </div>
-      <div class="program-item reveal">
-        <div class="program-num">03</div>
-        <div>
-          <div class="program-name">General Fitness</div>
-          <div class="program-desc">Full-body conditioning, mobility work, and cardiovascular health — the foundation for living better, moving better, feeling better.</div>
-          <div class="program-tags">
-            <span class="ptag">2-4 days/week</span>
-            <span class="ptag">All levels</span>
-            <span class="ptag">Group sessions</span>
-          </div>
-        </div>
-        <div class="program-arrow">→</div>
-      </div>
-      <div class="program-item reveal">
-        <div class="program-num">04</div>
-        <div>
-          <div class="program-name">Athletic Performance</div>
-          <div class="program-desc">Speed, agility, power, and endurance training for sportspeople who want the edge their competition doesn't have.</div>
-          <div class="program-tags">
-            <span class="ptag">5-6 days/week</span>
-            <span class="ptag">Intermediate+</span>
-            <span class="ptag">Sports-specific</span>
-          </div>
-        </div>
-        <div class="program-arrow">→</div>
-      </div>
+      <div class="program-item reveal"><div class="program-num">01</div><div><div class="program-name">Weight Loss</div><div class="program-desc">Metabolic training, caloric deficit coaching, and high-intensity circuits designed to strip fat and reveal the athlete inside you.</div><div class="program-tags"><span class="ptag">3-5 days/week</span><span class="ptag">All levels</span><span class="ptag">Nutrition plan included</span></div></div><div class="program-arrow">→</div></div>
+      <div class="program-item reveal"><div class="program-num">02</div><div><div class="program-name">Strength Training</div><div class="program-desc">Compound lifts, progressive overload, and periodised programming to build raw, functional strength from the ground up.</div><div class="program-tags"><span class="ptag">4-6 days/week</span><span class="ptag">Beginner to advanced</span><span class="ptag">1-on-1 coaching</span></div></div><div class="program-arrow">→</div></div>
+      <div class="program-item reveal"><div class="program-num">03</div><div><div class="program-name">General Fitness</div><div class="program-desc">Full-body conditioning, mobility work, and cardiovascular health — the foundation for living better, moving better, feeling better.</div><div class="program-tags"><span class="ptag">2-4 days/week</span><span class="ptag">All levels</span><span class="ptag">Group sessions</span></div></div><div class="program-arrow">→</div></div>
+      <div class="program-item reveal"><div class="program-num">04</div><div><div class="program-name">Athletic Performance</div><div class="program-desc">Speed, agility, power, and endurance training for sportspeople who want the edge their competition doesn't have.</div><div class="program-tags"><span class="ptag">5-6 days/week</span><span class="ptag">Intermediate+</span><span class="ptag">Sports-specific</span></div></div><div class="program-arrow">→</div></div>
     </div>
   </div>
 </section>
@@ -1627,58 +717,13 @@
 <section id="membership">
   <div class="membership-layout">
     <div class="membership-header reveal">
-    <div>
-      <div class="section-label">Membership</div>
-      <h2 class="membership-title">HONEST PRICING.<br>REAL VALUE.</h2>
-      </div>
-      <div>
-      <p class="membership-note">No hidden charges. No lock-in contracts. Beginner friendly.</p>
-      </div>
+      <div><div class="section-label">Membership</div><h2 class="membership-title">HONEST PRICING.<br>REAL VALUE.</h2></div>
+      <div><p class="membership-note">No hidden charges. No lock-in contracts. Beginner friendly.</p></div>
     </div>
     <div class="plans-grid">
-      <div class="plan reveal">
-        <div class="plan-name">Basic</div>
-        <div class="plan-price">₹999<span>/mo</span></div>
-        <div class="plan-period">Billed monthly · Cancel anytime</div>
-        <ul class="plan-features">
-          <li>Gym access (6 AM – 10 PM)</li>
-          <li>Basic equipment access</li>
-          <li>Locker room & shower</li>
-          <li class="dim">Personal training sessions</li>
-          <li class="dim">Nutrition consultation</li>
-          <li class="dim">Group classes</li>
-        </ul>
-        <a href="#" class="plan-btn plan-btn-outline">Get Started</a>
-      </div>
-      <div class="plan featured reveal" style="transition-delay:0.1s">
-        <div class="plan-badge">Most Popular</div>
-        <div class="plan-name">Transform</div>
-        <div class="plan-price">₹1,799<span>/mo</span></div>
-        <div class="plan-period">Billed monthly · Cancel anytime</div>
-        <ul class="plan-features">
-          <li>Unlimited gym access</li>
-          <li>All equipment access</li>
-          <li>4 personal training sessions</li>
-          <li>Monthly nutrition consultation</li>
-          <li>All group classes</li>
-          <li>Progress tracking app</li>
-        </ul>
-        <a href="#" class="plan-btn plan-btn-solid">Join Now</a>
-      </div>
-      <div class="plan reveal" style="transition-delay:0.2s">
-        <div class="plan-name">Elite</div>
-        <div class="plan-price">₹2,999<span>/mo</span></div>
-        <div class="plan-period">Billed monthly · Cancel anytime</div>
-        <ul class="plan-features">
-          <li>24/7 gym access</li>
-          <li>Unlimited personal training</li>
-          <li>Custom meal plan</li>
-          <li>Weekly check-ins</li>
-          <li>Priority coach access</li>
-          <li>Supplement guidance</li>
-        </ul>
-        <a href="#" class="plan-btn plan-btn-outline">Get Started</a>
-      </div>
+      <div class="plan reveal"><div class="plan-name">Basic</div><div class="plan-price">₹999<span>/mo</span></div><div class="plan-period">Billed monthly · Cancel anytime</div><ul class="plan-features"><li>Gym access (6 AM – 10 PM)</li><li>Basic equipment access</li><li>Locker room &amp; shower</li><li class="dim">Personal training sessions</li><li class="dim">Nutrition consultation</li><li class="dim">Group classes</li></ul><a href="contact.html" class="plan-btn plan-btn-outline">Get Started</a></div>
+      <div class="plan featured reveal" style="transition-delay:0.1s"><div class="plan-badge">Most Popular</div><div class="plan-name">Transform</div><div class="plan-price">₹1,799<span>/mo</span></div><div class="plan-period">Billed monthly · Cancel anytime</div><ul class="plan-features"><li>Unlimited gym access</li><li>All equipment access</li><li>4 personal training sessions</li><li>Monthly nutrition consultation</li><li>All group classes</li><li>Progress tracking app</li></ul><a href="contact.html" class="plan-btn plan-btn-solid">Join Now</a></div>
+      <div class="plan reveal" style="transition-delay:0.2s"><div class="plan-name">Elite</div><div class="plan-price">₹2,999<span>/mo</span></div><div class="plan-period">Billed monthly · Cancel anytime</div><ul class="plan-features"><li>24/7 gym access</li><li>Unlimited personal training</li><li>Custom meal plan</li><li>Weekly check-ins</li><li>Priority coach access</li><li>Supplement guidance</li></ul><a href="contact.html" class="plan-btn plan-btn-outline">Get Started</a></div>
     </div>
     <div class="trust-row reveal">
       <div class="trust-item"><span class="trust-icon">✓</span> No hidden fees — ever</div>
@@ -1692,55 +737,18 @@
 <!-- ENVIRONMENT -->
 <section id="environment">
   <div class="env-header reveal">
-    <div>
-      <div class="section-label">The Space</div>
-      <h2 class="env-title">WHERE<br>WORK GETS DONE</h2>
-    </div>
-    <p class="env-sub">
-      No fancy spa. No Instagram mirrors. Just serious equipment, serious space, and serious people who train.
-    </p>
+    <div><div class="section-label">The Space</div><h2 class="env-title">WHERE<br>WORK GETS DONE</h2></div>
+    <p class="env-sub">No fancy spa. No Instagram mirrors. Just serious equipment, serious space, and serious people who train.</p>
   </div>
   <div class="masonry reveal">
-    <div class="masonry-item m1">
-      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&fit=crop" alt="Gym floor" onerror="this.style.display='none'">
-      <div class="masonry-placeholder" style="font-size:20px;letter-spacing:3px;">GYM FLOOR</div>
-      <div class="masonry-item-label">Main Floor</div>
-    </div>
-    <div class="masonry-item m2">
-      <img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=500&q=80&fit=crop" alt="Weights" onerror="this.style.display='none'">
-      <div class="masonry-placeholder" style="font-size:14px">WEIGHTS</div>
-      <div class="masonry-item-label">Free Weights</div>
-    </div>
-    <div class="masonry-item m3">
-      <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&q=80&fit=crop" alt="Cardio" onerror="this.style.display='none'">
-      <div class="masonry-placeholder" style="font-size:14px">CARDIO</div>
-      <div class="masonry-item-label">Cardio Zone</div>
-    </div>
-    <div class="masonry-item m4">
-      <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80&fit=crop" alt="Training" onerror="this.style.display='none'">
-      <div class="masonry-placeholder" style="font-size:14px">POWER</div>
-      <div class="masonry-item-label">Power Rack</div>
-    </div>
-    <div class="masonry-item m5">
-      <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=500&q=80&fit=crop" alt="Boxing" onerror="this.style.display='none'">
-      <div class="masonry-placeholder" style="font-size:14px">COMBAT</div>
-      <div class="masonry-item-label">Combat Zone</div>
-    </div>
-    <div class="masonry-item m6">
-      <img src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=500&q=80&fit=crop" alt="Training" onerror="this.style.display='none'">
-      <div class="masonry-placeholder" style="font-size:14px">STRETCH</div>
-      <div class="masonry-item-label">Recovery</div>
-    </div>
-    <div class="masonry-item m7">
-      <img src="https://images.unsplash.com/photo-1581009137042-c552e485697a?w=500&q=80&fit=crop" alt="Machines" onerror="this.style.display='none'">
-      <div class="masonry-placeholder" style="font-size:14px">MACHINES</div>
-      <div class="masonry-item-label">Cable Machines</div>
-    </div>
-    <div class="masonry-item m8">
-      <img src="https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=800&q=80&fit=crop" alt="Group class" onerror="this.style.display='none'">
-      <div class="masonry-placeholder" style="font-size:20px;letter-spacing:3px">GROUP CLASS</div>
-      <div class="masonry-item-label">Group Training</div>
-    </div>
+    <div class="masonry-item m1"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&fit=crop" alt="Gym floor" onerror="this.style.display='none'"><div class="masonry-placeholder" style="font-size:20px;letter-spacing:3px;">GYM FLOOR</div><div class="masonry-item-label">Main Floor</div></div>
+    <div class="masonry-item m2"><img src="https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=500&q=80&fit=crop" alt="Weights" onerror="this.style.display='none'"><div class="masonry-placeholder" style="font-size:14px">WEIGHTS</div><div class="masonry-item-label">Free Weights</div></div>
+    <div class="masonry-item m3"><img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500&q=80&fit=crop" alt="Cardio" onerror="this.style.display='none'"><div class="masonry-placeholder" style="font-size:14px">CARDIO</div><div class="masonry-item-label">Cardio Zone</div></div>
+    <div class="masonry-item m4"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80&fit=crop" alt="Training" onerror="this.style.display='none'"><div class="masonry-placeholder" style="font-size:14px">POWER</div><div class="masonry-item-label">Power Rack</div></div>
+    <div class="masonry-item m5"><img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=500&q=80&fit=crop" alt="Boxing" onerror="this.style.display='none'"><div class="masonry-placeholder" style="font-size:14px">COMBAT</div><div class="masonry-item-label">Combat Zone</div></div>
+    <div class="masonry-item m6"><img src="https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=500&q=80&fit=crop" alt="Training" onerror="this.style.display='none'"><div class="masonry-placeholder" style="font-size:14px">STRETCH</div><div class="masonry-item-label">Recovery</div></div>
+    <div class="masonry-item m7"><img src="https://images.unsplash.com/photo-1581009137042-c552e485697a?w=500&q=80&fit=crop" alt="Machines" onerror="this.style.display='none'"><div class="masonry-placeholder" style="font-size:14px">MACHINES</div><div class="masonry-item-label">Cable Machines</div></div>
+    <div class="masonry-item m8"><img src="https://images.unsplash.com/photo-1534258936925-c58bed479fcb?w=800&q=80&fit=crop" alt="Group class" onerror="this.style.display='none'"><div class="masonry-placeholder" style="font-size:20px;letter-spacing:3px">GROUP CLASS</div><div class="masonry-item-label">Group Training</div></div>
   </div>
 </section>
 
@@ -1751,67 +759,95 @@
   <h2 class="cta-title reveal">YOUR<br>TRANSFORMATION<br>STARTS <span class="orange">TODAY</span></h2>
   <p class="cta-sub reveal">Stop waiting for the right moment. The right moment is the one where you decide to stop waiting.</p>
   <div class="cta-btn-wrap reveal">
-    <a href="#membership" class="btn-primary">Claim Your Free Trial</a>
-    <a href="tel:+91XXXXXXXXXX" class="btn-ghost">Call Us Now</a>
+    <a href="contact.html" class="btn-primary">Claim Your Free Trial</a>
+    <a href="tel:+919876543210" class="btn-ghost">Call Us Now</a>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <a href="#" class="footer-logo">V<span>FIT</span> GYM</a>
+  <a href="index.html" class="footer-logo">V<span>FIT</span> GYM</a>
   <ul class="footer-links">
-    <li><a href="#">Instagram</a></li>
-    <li><a href="#">WhatsApp</a></li>
-    <li><a href="#">Maps</a></li>
-    <li><a href="#">Contact</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="programs.html">Programs</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="contact.html">Contact</a></li>
   </ul>
   <div class="footer-copy">© 2024 VFIT Gym · Cuddalore, Tamil Nadu</div>
 </footer>
 
 <script>
-  // Scroll progress bar
+  // Scroll progress + sticky nav
   const bar = document.getElementById('progress-bar');
+  const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
-    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-    bar.style.width = pct + '%';
+    bar.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
   });
 
-  // Sticky nav
-  const nav = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
+  // ─── SIDE PANEL LOGIC ───
+  const hamburger = document.getElementById('hamburger');
+  const sidePanel = document.getElementById('side-panel');
+  const sideOverlay = document.getElementById('side-overlay');
+  let menuOpen = false;
+
+  function openMenu() {
+    menuOpen = true;
+    hamburger.classList.add('open');
+    sidePanel.classList.add('open');
+    sideOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    hamburger.setAttribute('aria-label', 'Close menu');
+  }
+
+  function closeMenu() {
+    menuOpen = false;
+    hamburger.classList.remove('open');
+    sidePanel.classList.remove('open');
+    sideOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    hamburger.setAttribute('aria-label', 'Open menu');
+  }
+
+  function toggleMenu() {
+    menuOpen ? closeMenu() : openMenu();
+  }
+
+  // Close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && menuOpen) closeMenu();
   });
 
-  // Animated counters
+  // Close when a side panel link is clicked
+  document.querySelectorAll('.side-nav a').forEach(link => {
+    link.addEventListener('click', () => closeMenu());
+  });
+
+  // ─── ANIMATED COUNTERS ───
   function animateCounter(el) {
     const target = parseInt(el.dataset.target);
     const duration = 1800;
     const start = performance.now();
     const tick = (now) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
+      const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.floor(eased * target) + (progress >= 1 && el.dataset.target === '92' ? '' : progress >= 1 ? '+' : '');
+      el.textContent = Math.floor(eased * target);
       if (progress < 1) requestAnimationFrame(tick);
       else el.textContent = target + (target === 92 || target === 6 ? '' : '+');
     };
     requestAnimationFrame(tick);
   }
 
-  // Reveal on scroll + counter trigger
+  // ─── SCROLL REVEAL ───
   const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
   const counters = document.querySelectorAll('.stat-number[data-target]');
   let countersAnimated = false;
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
     });
   }, { threshold: 0.12 });
-
   reveals.forEach(el => observer.observe(el));
 
   const counterObserver = new IntersectionObserver((entries) => {
@@ -1825,7 +861,7 @@
   const statsSection = document.getElementById('stats');
   if (statsSection) counterObserver.observe(statsSection);
 
-  // Before/After slider
+  // ─── BEFORE / AFTER SLIDER ───
   const wrap = document.getElementById('ba-wrap');
   const after = document.getElementById('ba-after');
   const handle = document.getElementById('ba-handle');
